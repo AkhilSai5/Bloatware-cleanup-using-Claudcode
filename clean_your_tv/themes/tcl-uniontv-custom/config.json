@@ -1,0 +1,24 @@
+{
+  "name": "TCL UnionTV Custom",
+  "description": "Custom dock layout for TCL UnionTV",
+  "columns": 5,
+  "dock_apps": [
+    "com.amazon.amazonvideo.livingroom",
+    "com.google.android.youtube.tv",
+    "in.startv.hotstar",
+    "com.sonyliv",
+    "ahaflix.tv"
+  ],
+  "hidden_apps": [
+    "com.mediatek.wwtv.tvcenter",
+    "com.mitv.gallery",
+    "com.tcl.tv"
+  ],
+  "dock_row": true,
+  "ambient_glow": true,
+  "glass_style": "glass",
+  "show_greeting": true,
+  "show_network_pill": true,
+  "show_inputs_pill": true,
+  "home_idle_clock_minutes": 0
+}

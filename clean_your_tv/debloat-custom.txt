@@ -1,0 +1,44 @@
+# TCL UnionTV - Custom debloat for this unit
+# Generated: 2026-11-03
+# Keep: Chromecast, Firmware Updates, Prime Video, YouTube
+# Don't keep: Netflix, Spotify, Voice Assistant
+
+# === BATCH 1: Telemetry & Analytics ===
+# com.tcl.bi - not installed on this unit
+# com.google.android.feedback - could be disabled but Google Play Services may need it
+# com.google.android.tv.bugreportsender - can disable
+
+# === BATCH 2: Content/Promo Rows ===
+# com.google.android.tvrecommendations - recommendations rows
+# com.google.android.leanbacklauncher.recommendations - same
+# com.tcl.partnercustomizer - not installed
+# com.tcl.dashboard - not installed
+# com.tcl.tv.tclhome_passive - not installed
+android.autoinstalls.config.tcl.device  # auto-installs of partner apps
+
+# === BATCH 3: Preloaded Apps (not streaming/keep) ===
+com.google.android.videos               # Play Movies & TV (redundant with streaming)
+com.google.android.play.games           # Play Games
+com.android.printspooler                # Print spooler (not used on TV)
+
+# === BATCH 4: Already partially disabled, finish off ===
+# com.google.android.music - already disabled in backup
+# com.android.gallery3d - already disabled
+# com.google.android.speech.pumpkin - already disabled (offline hotword)
+
+# === BATCH 5: Second pass - screensavers, TTS, etc ===
+# com.google.android.backdrop - Ambient Mode (replace with launcher's Clock)
+com.google.android.tts                  # Text-to-speech (~18MB, only accessibility)
+# com.google.android.marvin.talkback - TalkBack screen reader (keep if needed)
+# com.google.android.speech.pumpkin - offline hotword (already disabled)
+# com.android.wallpaper.livepicker - wallpaper picker
+# com.android.dreams.basic - basic dreams/screensaver
+com.tcl.common.terminalmanagerplus      # device management service, starts at boot
+com.tcl.copydatatotv                    # phone-to-TV copy helper, starts at boot
+
+# === ALREADY DISABLED (from backup) ===
+# com.google.android.katniss - Google Assistant (keep disabled per user)
+# com.netflix.ninja - Netflix (keep disabled per user)
+# com.spotify.tv.android - Spotify (not installed, user doesn't want)
+# com.tcl.initsetup - already disabled
+# com.tcl.keyhelp - already disabled
