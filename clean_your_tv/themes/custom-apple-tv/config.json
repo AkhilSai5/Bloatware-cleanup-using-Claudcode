@@ -1,0 +1,13 @@
+﻿{
+  "dock_apps": [
+    "com.google.android.youtube.tv",
+    "app.netmirror.newtv",
+    "com.graymatrix.did",
+    "com.htlabs.ottplay"
+  ],
+  "columns": 4,
+  "dock_row": true,
+  "dock_title": true,
+  "fill_dock": false,
+  "background_color": "#000000"
+}
