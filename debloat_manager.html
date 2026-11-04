@@ -1,0 +1,1292 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>TECNO KJ8 Debloat Manager</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/*
+  -- Color Token System & Theme Configuration --
+  Layout Concept: Modern Split Dashboard with Interactive Package Cards & Live Script Console
+*/
+:root {
+  --bg: #090d16;
+  --bg-card: #131b2e;
+  --bg-card-hover: #1a2540;
+  --bg-input: #1a2540;
+  --fg: #f1f5f9;
+  --fg-muted: #94a3b8;
+  --border: #1e293b;
+  --border-subtle: #2a3959;
+  --accent: #10b981;
+  --accent-hover: #059669;
+  --accent-glow: rgba(16, 185, 129, 0.15);
+  --danger: #ef4444;
+  --danger-bg: rgba(239, 68, 68, 0.1);
+  --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.1);
+  --info: #3b82f6;
+  --info-bg: rgba(59, 130, 246, 0.1);
+  --code-bg: #05070c;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f1f5f9;
+    --bg-input: #f8fafc;
+    --fg: #0f172a;
+    --fg-muted: #64748b;
+    --border: #e2e8f0;
+    --border-subtle: #cbd5e1;
+    --accent: #059669;
+    --accent-hover: #047857;
+    --accent-glow: rgba(5, 150, 105, 0.1);
+    --danger: #dc2626;
+    --danger-bg: rgba(220, 38, 38, 0.08);
+    --warning: #d97706;
+    --warning-bg: rgba(217, 119, 6, 0.08);
+    --info: #2563eb;
+    --info-bg: rgba(37, 99, 235, 0.08);
+    --code-bg: #0f172a;
+    color-scheme: light;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #090d16;
+  --bg-card: #131b2e;
+  --bg-card-hover: #1a2540;
+  --bg-input: #1a2540;
+  --fg: #f1f5f9;
+  --fg-muted: #94a3b8;
+  --border: #1e293b;
+  --border-subtle: #2a3959;
+  --accent: #10b981;
+  --accent-hover: #059669;
+  --accent-glow: rgba(16, 185, 129, 0.15);
+  --danger: #ef4444;
+  --danger-bg: rgba(239, 68, 68, 0.1);
+  --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.1);
+  --info: #3b82f6;
+  --info-bg: rgba(59, 130, 246, 0.1);
+  --code-bg: #05070c;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+header::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 100;
+  background: var(--bg);
+}
+
+.app-container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 24px;
+}
+
+@media(min-width: 768px) {
+  .header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.header-title h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-title h1 span.badge {
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: var(--accent-glow);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.header-title p {
+  color: var(--fg-muted);
+  font-size: 0.95rem;
+  margin-top: 4px;
+}
+
+.device-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.device-badge .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+}
+
+/* Stats Row */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-card .label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--fg-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-card .value {
+  font-size: 1.625rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Controls & Filters */
+.controls-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+@media(min-width: 768px) {
+  .controls-bar {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.search-box {
+  position: relative;
+  flex: 1;
+  max-width: 450px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 10px 16px 10px 40px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  color: var(--fg);
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.search-box input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.search-box svg {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--fg-muted);
+  width: 18px;
+  height: 18px;
+}
+
+.filter-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.filter-btn {
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  color: var(--fg-muted);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover {
+  border-color: var(--fg-muted);
+  color: var(--fg);
+}
+
+.filter-btn.active {
+  background: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
+}
+
+.bulk-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  color: var(--fg);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--fg-muted);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+/* Package List */
+.package-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+.package-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.package-card:hover {
+  border-color: var(--border-subtle);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.package-card.selected {
+  border-color: var(--accent);
+  background: linear-gradient(to bottom, var(--bg-card), var(--accent-glow));
+}
+
+.pkg-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.pkg-checkbox {
+  margin-top: 3px;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.pkg-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.pkg-name {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--fg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.pkg-id {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--fg-muted);
+  word-break: break-all;
+  margin-top: 2px;
+}
+
+.pkg-desc {
+  font-size: 0.875rem;
+  color: var(--fg-muted);
+  margin-top: 8px;
+}
+
+.pkg-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  margin-top: 4px;
+}
+
+.badge-safety {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.safety-safe { background: var(--accent-glow); color: var(--accent); border: 1px solid var(--accent); }
+.safety-caution { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning); }
+.safety-danger { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger); }
+.safety-user { background: var(--info-bg); color: var(--info); border: 1px solid var(--info); }
+
+.pkg-status {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--fg-muted);
+}
+
+/* Script Drawer / Modal */
+.script-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  margin-top: 32px;
+}
+
+.script-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.script-header h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.script-tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.script-tab {
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  color: var(--fg-muted);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.script-tab.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.code-box {
+  background: var(--code-box-bg, var(--code-bg));
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.825rem;
+  color: #e2e8f0;
+  overflow-x: auto;
+  max-height: 300px;
+  white-space: pre;
+  line-height: 1.6;
+}
+
+.script-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--fg-muted);
+}
+
+.empty-state h3 {
+  font-size: 1.1rem;
+  color: var(--fg);
+  margin-bottom: 6px;
+}
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--accent);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  z-index: 1000;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+</style>
+</head>
+<body>
+
+<div class="app-container">
+  <header class="header">
+    <div class="header-title">
+      <h1>TECNO KJ8 Debloat Manager <span class="badge">Android 14 (SDK 34)</span></h1>
+      <p>Inspect pre-installed system packages & user apps, select bloatware, and generate safe ADB debloat & restore scripts.</p>
+    </div>
+    <div class="device-badge">
+      <div class="dot"></div>
+      <span>Connected: TECNO_KJ8 (120533148P056211)</span>
+    </div>
+  </header>
+
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="label">Total Packages</span>
+      <span class="value" id="stat-total">0</span>
+    </div>
+    <div class="stat-card">
+      <span class="label">Selected for Debloat</span>
+      <span class="value" id="stat-selected" style="color: var(--accent);">0</span>
+    </div>
+    <div class="stat-card">
+      <span class="label">Already Disabled</span>
+      <span class="value" id="stat-disabled" style="color: var(--warning);">0</span>
+    </div>
+    <div class="stat-card">
+      <span class="label">User Installed</span>
+      <span class="value" id="stat-user" style="color: var(--info);">0</span>
+    </div>
+  </div>
+
+  <!-- Controls Bar -->
+  <div class="controls-bar">
+    <div class="search-box">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <input type="text" id="searchInput" placeholder="Search by app name or package ID...">
+    </div>
+    <div class="filter-tabs" id="filterTabs">
+      <button class="filter-btn active" data-filter="all">All Packages</button>
+      <button class="filter-btn" data-filter="bloat">Bloatware (Safe to Remove)</button>
+      <button class="filter-btn" data-filter="caution">Caution / Optional</button>
+      <button class="filter-btn" data-filter="user">User Apps</button>
+      <button class="filter-btn" data-filter="disabled">Disabled</button>
+    </div>
+  </div>
+
+  <!-- Bulk Actions -->
+  <div class="bulk-actions">
+    <button class="btn" id="selectAllBtn">Select All Filtered</button>
+    <button class="btn" id="deselectAllBtn">Deselect All</button>
+    <button class="btn btn-primary" id="selectBloatBtn">Select Recommended Bloatware</button>
+  </div>
+
+  <!-- Package List Grid -->
+  <div class="package-grid" id="packageGrid"></div>
+
+  <!-- Script Preview Drawer -->
+  <div class="script-section">
+    <div class="script-header">
+      <h2>Generated ADB Scripts & Restore Plan</h2>
+      <div class="script-tabs">
+        <button class="script-tab active" data-script="powershell">PowerShell Script</button>
+        <button class="script-tab" data-script="bash">Bash / Shell Script</button>
+        <button class="script-tab" data-script="restore">Restore Script</button>
+      </div>
+    </div>
+    <pre class="code-box" id="codeOutput"># Select packages above to generate corresponding ADB debloat commands.</pre>
+    <div class="script-actions">
+      <button class="btn btn-primary" id="copyScriptBtn">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        Copy Script to Clipboard
+      </button>
+      <button class="btn" id="saveScriptBtn">Save Script File</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Script copied to clipboard successfully!</div>
+
+<script>
+// Complete package dataset collected from TECNO KJ8 (Android 14)
+const packagesData = [
+  // --- RECOMMENDED BLOATWARE (Safe to remove/disable) ---
+  {
+    id: "cn.wps.moffice.lite.abroad.transsion",
+    name: "WPS Office (Transsion Edition)",
+    desc: "Pre-installed office suite and document reader with ads/promotions.",
+    category: "bloat",
+    safety: "safe",
+    disabled: false,
+    type: "system"
+  },
+  {
+    id: "com.facebook.appmanager",
+    name: "Meta App Manager",
+    desc: "Background service for managing Facebook app installations and updates.",
+    category: "bloat",
+    safety: "safe",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.facebook.services",
+    name: "Meta Services",
+    desc: "Core background service associated with Facebook ecosystem.",
+    category: "bloat",
+    safety: "safe",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.facebook.system",
+    name: "Meta System",
+    desc: "Pre-installed Meta integration system package.",
+    category: "bloat",
+    safety: "safe",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.transsion.magazineservice.hios",
+    name: "AI Lock Screen / Magazine",
+    desc: "Displays lock screen wallpapers, stories, and advertisements.",
+    category: "bloat",
+    safety: "safe",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.transsnet.store",
+    name: "Palm Store",
+    desc: "Transsion proprietary app store (alternative to Google Play).",
+    category: "bloat",
+    safety: "safe",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.talpa.hibrowser",
+    name: "HiBrowser",
+    desc: "Pre-installed web browser by Transsion with unwanted notifications.",
+    category: "bloat",
+    safety: "safe",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.sh.smart.caller",
+    name: "Smart Caller",
+    desc: "Transsion caller ID and dialing enhancement package.",
+    category: "bloat",
+    safety: "safe",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.appfactory.tidytv",
+    name: "Tidy TV",
+    desc: "Preloaded promotional video / streaming utility.",
+    category: "bloat",
+    safety: "safe",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.scorpio.securitycom",
+    name: "Security / Antivirus Engine",
+    desc: "Bundled third-party security scanner app.",
+    category: "bloat",
+    safety: "safe",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.geniex.vsimhelper",
+    name: "Virtual SIM Helper",
+    desc: "Transsion virtual roaming / cloud SIM utility.",
+    category: "bloat",
+    safety: "safe",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.transsion.quicktools",
+    name: "Quick Tools",
+    desc: "Shortcut utilities panel by Transsion.",
+    category: "bloat",
+    safety: "safe",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.transsion.smartpanel",
+    name: "Smart Panel",
+    desc: "Edge panel for quick apps and tools.",
+    category: "bloat",
+    safety: "safe",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.transsion.avatar",
+    name: "Avatar / Memoji",
+    desc: "Avatar creation tool for contacts/profile.",
+    category: "bloat",
+    safety: "safe",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.transsion.aivoiceassistant",
+    name: "Ella AI Voice Assistant",
+    desc: "Transsion proprietary AI voice assistant.",
+    category: "bloat",
+    safety: "safe",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.transsion.kolun.aiservice",
+    name: "Kolun AI Service",
+    desc: "Transsion backend AI processing service.",
+    category: "bloat",
+    safety: "safe",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.transsion.kolun.assistant",
+    name: "Kolun Assistant",
+    desc: "Transsion AI assistant helper package.",
+    category: "bloat",
+    safety: "safe",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.transsion.cloudserver",
+    name: "Transsion Cloud Server",
+    desc: "Cloud sync service for Transsion account.",
+    category: "bloat",
+    safety: "safe",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.transsion.statisticalsales",
+    name: "Statistical Sales",
+    desc: "Telemetry and sales analytics reporting service.",
+    category: "bloat",
+    safety: "safe",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.transsion.teop",
+    name: "TEOP (Experience Optimization)",
+    desc: "Transsion experience feedback and telemetry program.",
+    category: "bloat",
+    safety: "safe",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.transsion.zahooc",
+    name: "Zahooc Adware / Promotion",
+    desc: "Promotional content push service.",
+    category: "bloat",
+    safety: "safe",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "tech.palm.find",
+    name: "Palm Find Device",
+    desc: "Transsion device tracking service.",
+    category: "bloat",
+    safety: "safe",
+    disabled: false,
+    type: "system"
+  },
+  {
+    id: "tech.palm.id",
+    name: "Palm ID Account",
+    desc: "Transsion account management service.",
+    category: "bloat",
+    safety: "safe",
+    disabled: false,
+    type: "system"
+  },
+  {
+    id: "com.hoffnung",
+    name: "Hoffnung Diagnostic",
+    desc: "Pre-installed internal diagnostic package.",
+    category: "bloat",
+    safety: "safe",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.idea.questionnaire",
+    name: "Idea Questionnaire",
+    desc: "Preloaded feedback / survey application.",
+    category: "bloat",
+    safety: "safe",
+    disabled: true,
+    type: "system"
+  },
+
+  // --- CAUTION / OPTIONAL ---
+  {
+    id: "com.transsion.dynamicbar",
+    name: "Dynamic Bar",
+    desc: "Dynamic Island notification pill around camera cutout. (Safe to remove if you prefer standard notifications)",
+    category: "caution",
+    safety: "caution",
+    disabled: false,
+    type: "system"
+  },
+  {
+    id: "com.transsion.phonemanager",
+    name: "Phone Manager / Master",
+    desc: "System cleaner, battery saver, and app lock. (Removing may affect built-in battery optimization prompts)",
+    category: "caution",
+    safety: "caution",
+    disabled: false,
+    type: "system"
+  },
+  {
+    id: "com.transsion.batterylab",
+    name: "Battery Lab",
+    desc: "Advanced battery stats and power saving modes.",
+    category: "caution",
+    safety: "caution",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.transsion.carlcare",
+    name: "Carlcare Support",
+    desc: "Official customer service and repair booking app for TECNO/Itel/Infinix.",
+    category: "caution",
+    safety: "caution",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.transsion.childmode",
+    name: "Kids Mode",
+    desc: "Parental control and child sandbox mode.",
+    category: "caution",
+    safety: "caution",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.transsion.faceid",
+    name: "Face Unlock",
+    desc: "Facial recognition biometric authentication service.",
+    category: "caution",
+    safety: "caution",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.google.android.apps.googleassistant",
+    name: "Google Assistant",
+    desc: "Google voice assistant integration.",
+    category: "caution",
+    safety: "caution",
+    disabled: true,
+    type: "system"
+  },
+  {
+    id: "com.google.android.youtube",
+    name: "YouTube",
+    desc: "Official YouTube client app.",
+    category: "caution",
+    safety: "caution",
+    disabled: false,
+    type: "system"
+  },
+
+  // --- USER INSTALLED APPS ---
+  {
+    id: "com.whatsapp",
+    name: "WhatsApp Messenger",
+    desc: "Messaging and VoIP application.",
+    category: "user",
+    safety: "user",
+    disabled: false,
+    type: "third-party"
+  },
+  {
+    id: "com.truecaller",
+    name: "Truecaller",
+    desc: "Caller ID and spam blocking app.",
+    category: "user",
+    safety: "user",
+    disabled: false,
+    type: "third-party"
+  },
+  {
+    id: "com.phonepe.app",
+    name: "PhonePe",
+    desc: "Digital payments and UPI wallet.",
+    category: "user",
+    safety: "user",
+    disabled: false,
+    type: "third-party"
+  },
+  {
+    id: "net.one97.paytm",
+    name: "Paytm",
+    desc: "Financial services and digital payments.",
+    category: "user",
+    safety: "user",
+    disabled: false,
+    type: "third-party"
+  },
+  {
+    id: "in.amazon.mShop.android.shopping",
+    name: "Amazon Shopping",
+    desc: "E-commerce marketplace app.",
+    category: "user",
+    safety: "user",
+    disabled: false,
+    type: "third-party"
+  },
+  {
+    id: "com.flipkart.android",
+    name: "Flipkart",
+    desc: "E-commerce shopping app.",
+    category: "user",
+    safety: "user",
+    disabled: false,
+    type: "third-party"
+  },
+  {
+    id: "com.google.android.apps.nbu.paisa.user",
+    name: "Google Pay",
+    desc: "Digital payments app.",
+    category: "user",
+    safety: "user",
+    disabled: false,
+    type: "third-party"
+  },
+  {
+    id: "com.Slack",
+    name: "Slack",
+    desc: "Team collaboration and messaging tool.",
+    category: "user",
+    safety: "user",
+    disabled: false,
+    type: "third-party"
+  },
+  {
+    id: "com.csam.icici.bank.imobile",
+    name: "ICICI iMobile Pay",
+    desc: "Mobile banking application.",
+    category: "user",
+    safety: "user",
+    disabled: false,
+    type: "third-party"
+  },
+  {
+    id: "com.hdfcbank.payzapp",
+    name: "HDFC PayZapp",
+    desc: "UPI and payments app.",
+    category: "user",
+    safety: "user",
+    disabled: false,
+    type: "third-party"
+  },
+  {
+    id: "in.org.npci.upiapp",
+    name: "BHIM UPI",
+    desc: "Official UPI payments app.",
+    category: "user",
+    safety: "user",
+    disabled: false,
+    type: "third-party"
+  },
+  {
+    id: "com.jpl.jiomart",
+    name: "JioMart",
+    desc: "Online grocery and shopping app.",
+    category: "user",
+    safety: "user",
+    disabled: false,
+    type: "third-party"
+  },
+  {
+    id: "com.myntra.android",
+    name: "Myntra",
+    desc: "Fashion and lifestyle shopping app.",
+    category: "user",
+    safety: "user",
+    disabled: false,
+    type: "third-party"
+  },
+  {
+    id: "org.altruist.BajajExperia",
+    name: "Bajaj Finserv Experia",
+    desc: "Financial services and loan management app.",
+    category: "user",
+    safety: "user",
+    disabled: false,
+    type: "third-party"
+  }
+];
+
+let state = {
+  selected: new Set(),
+  filter: "all",
+  search: "",
+  scriptType: "powershell"
+};
+
+function init() {
+  renderStats();
+  renderPackages();
+  setupEventListeners();
+  updateScriptOutput();
+}
+
+function renderStats() {
+  document.getElementById('stat-total').textContent = packagesData.length;
+  document.getElementById('stat-selected').textContent = state.selected.size;
+  const disabledCount = packagesData.filter(p => p.disabled).length;
+  document.getElementById('stat-disabled').textContent = disabledCount;
+  const userCount = packagesData.filter(p => p.category === 'user').length;
+  document.getElementById('stat-user').textContent = userCount;
+}
+
+function renderPackages() {
+  const grid = document.getElementById('packageGrid');
+  const filtered = packagesData.filter(p => {
+    const matchesFilter =
+      state.filter === 'all' ? true :
+      state.filter === 'bloat' ? p.category === 'bloat' :
+      state.filter === 'caution' ? p.category === 'caution' :
+      state.filter === 'user' ? p.category === 'user' :
+      state.filter === 'disabled' ? p.disabled : true;
+
+    const matchesSearch = p.name.toLowerCase().includes(state.search.toLowerCase()) ||
+                          p.id.toLowerCase().includes(state.search.toLowerCase()) ||
+                          p.desc.toLowerCase().includes(state.search.toLowerCase());
+    return matchesFilter && matchesSearch;
+  });
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state" style="grid-column: 1 / -1;">
+        <h3>No matching packages found</h3>
+        <p>Try adjusting your search query or filter category.</p>
+      </div>
+    `;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(p => {
+    const isSelected = state.selected.has(p.id);
+    const safetyClass =
+      p.safety === 'safe' ? 'safety-safe' :
+      p.safety === 'caution' ? 'safety-caution' :
+      p.safety === 'danger' ? 'safety-danger' : 'safety-user';
+
+    const safetyText =
+      p.safety === 'safe' ? '✓ Safe to Remove' :
+      p.safety === 'caution' ? '⚠ Caution / Optional' :
+      p.safety === 'danger' ? '✕ System Critical' : '👤 User App';
+
+    return `
+      <div class="package-card ${isSelected ? 'selected' : ''}" data-id="${p.id}">
+        <div class="pkg-header">
+          <input type="checkbox" class="pkg-checkbox" ${isSelected ? 'checked' : ''} data-id="${p.id}">
+          <div class="pkg-info">
+            <div class="pkg-name">
+              <span>${p.name}</span>
+              <span class="badge-safety ${safetyClass}">${safetyText}</span>
+            </div>
+            <div class="pkg-id">${p.id}</div>
+            <div class="pkg-desc">${p.desc}</div>
+          </div>
+        </div>
+        <div class="pkg-footer">
+          <span class="pkg-status">Type: ${p.type} ${p.disabled ? '• (Currently Disabled)' : ''}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Attach card click & checkbox listeners
+  grid.querySelectorAll('.package-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      if (e.target.tagName === 'INPUT') return;
+      const id = card.dataset.id;
+      toggleSelect(id);
+    });
+  });
+
+  grid.querySelectorAll('.pkg-checkbox').forEach(chk => {
+    chk.addEventListener('change', (e) => {
+      const id = e.target.dataset.id;
+      toggleSelect(id);
+    });
+  });
+}
+
+function toggleSelect(id) {
+  if (state.selected.has(id)) {
+    state.selected.delete(id);
+  } else {
+    state.selected.add(id);
+  }
+  renderStats();
+  renderPackages();
+  updateScriptOutput();
+}
+
+function setupEventListeners() {
+  document.getElementById('searchInput').addEventListener('input', (e) => {
+    state.search = e.target.value;
+    renderPackages();
+  });
+
+  document.getElementById('filterTabs').addEventListener('click', (e) => {
+    if (!e.target.classList.contains('filter-btn')) return;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    state.filter = e.target.dataset.filter;
+    renderPackages();
+  });
+
+  document.getElementById('selectAllBtn').addEventListener('click', () => {
+    const filtered = packagesData.filter(p => {
+      return state.filter === 'all' ? true :
+             state.filter === 'bloat' ? p.category === 'bloat' :
+             state.filter === 'caution' ? p.category === 'caution' :
+             state.filter === 'user' ? p.category === 'user' :
+             state.filter === 'disabled' ? p.disabled : true;
+    });
+    filtered.forEach(p => state.selected.add(p.id));
+    renderStats();
+    renderPackages();
+    updateScriptOutput();
+  });
+
+  document.getElementById('deselectAllBtn').addEventListener('click', () => {
+    state.selected.clear();
+    renderStats();
+    renderPackages();
+    updateScriptOutput();
+  });
+
+  document.getElementById('selectBloatBtn').addEventListener('click', () => {
+    packagesData.filter(p => p.category === 'bloat').forEach(p => state.selected.add(p.id));
+    renderStats();
+    renderPackages();
+    updateScriptOutput();
+  });
+
+  document.querySelectorAll('.script-tab').forEach(tab => {
+    tab.addEventListener('click', (e) => {
+      document.querySelectorAll('.script-tab').forEach(t => t.classList.remove('active'));
+      e.target.classList.add('active');
+      state.scriptType = e.target.dataset.script;
+      updateScriptOutput();
+    });
+  });
+
+  document.getElementById('copyScriptBtn').addEventListener('click', () => {
+    const code = document.getElementById('codeOutput').textContent;
+    navigator.clipboard.writeText(code).then(() => {
+      showToast();
+    });
+  });
+
+  document.getElementById('saveScriptBtn').addEventListener('click', () => {
+    const code = document.getElementById('codeOutput').textContent;
+    const filename = state.scriptType === 'restore' ? 'restore_apps.bat' : 'debloat_apps.bat';
+    const blob = new Blob([code], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+}
+
+function updateScriptOutput() {
+  const codeBox = document.getElementById('codeOutput');
+  const selectedIds = Array.from(state.selected);
+
+  if (selectedIds.length === 0) {
+    codeBox.textContent = `# No packages selected.\n# Please select one or more packages from above to generate the script.`;
+    return;
+  }
+
+  if (state.scriptType === 'powershell') {
+    let script = `# TECNO KJ8 Debloat Script (Generated by Claude Code)\n`;
+    script += `# Target Device: 120533148P056211\n`;
+    script += `# Ensure USB debugging is enabled and device is connected.\n\n`;
+    script += `Write-Host "Starting debloat process for ${selectedIds.length} package(s)..." -ForegroundColor Cyan\n\n`;
+    selectedIds.forEach(id => {
+      const p = packagesData.find(item => item.id === id);
+      script += `Write-Host "Disabling / Uninstalling: ${p ? p.name : id}" -ForegroundColor Yellow\n`;
+      script += `adb shell pm uninstall -k --user 0 ${id}\n`;
+    });
+    script += `\nWrite-Host "Debloat completed successfully!" -ForegroundColor Green\n`;
+    codeBox.textContent = script;
+  } else if (state.scriptType === 'bash') {
+    let script = `#!/bin/bash\n`;
+    script += `# TECNO KJ8 Debloat Script (Generated by Claude Code)\n`;
+    script += `# Target Device: 120533148P056211\n\n`;
+    script += `echo "Starting debloat process for ${selectedIds.length} package(s)..."\n\n`;
+    selectedIds.forEach(id => {
+      script += `echo "Removing ${id}..."\n`;
+      script += `adb shell pm uninstall -k --user 0 ${id}\n`;
+    });
+    script += `\necho "Debloat completed successfully!"\n`;
+    codeBox.textContent = script;
+  } else if (state.scriptType === 'restore') {
+    let script = `@echo off\n`;
+    script += `:: TECNO KJ8 RESTORE SCRIPT (Generated by Claude Code)\n`;
+    script += `:: This script restores all uninstalled or disabled system/user packages back to the device.\n\n`;
+    script += `echo Restoring ${selectedIds.length} package(s) on TECNO KJ8...\n\n`;
+    selectedIds.forEach(id => {
+      script += `echo Restoring ${id}...\n`;
+      script += `adb shell cmd package install-existing ${id}\n`;
+      script += `adb shell pm enable ${id}\n`;
+    });
+    script += `\necho Restore process completed successfully!\n`;
+    codeBox.textContent = script;
+  }
+}
+
+function showToast() {
+  const toast = document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 2500);
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

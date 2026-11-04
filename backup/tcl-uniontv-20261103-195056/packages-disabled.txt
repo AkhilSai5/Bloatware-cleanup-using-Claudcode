@@ -1,0 +1,10 @@
+﻿package:com.tcl.initsetup
+package:com.tcl.keyhelp
+package:com.google.android.speech.pumpkin
+package:com.google.android.music
+package:com.google.android.tvlauncher
+package:com.android.gallery3d
+package:com.google.android.videos
+package:com.google.android.leanbacklauncher.partnercustomizer
+package:com.google.android.play.games
+package:com.netflix.ninja

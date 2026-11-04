@@ -1,0 +1,8 @@
+﻿Device ID: 4b726b1
+Backup Date: 2026-10-28
+Device Model: Mi A2
+Device Name: jasmine
+Manufacturer: Xiaomi
+Android Version: 10
+Build ID: QKQ1.190910.002 V11.0.28.0.QDIMIXM
+Build Fingerprint: xiaomi/jasmine/jasmine_sprout:10/QKQ1.190910.002/V11.0.28.0.QDIMIXM:user/release-keys

@@ -1,0 +1,14 @@
+﻿package:com.google.android.webview.beta
+package:com.truecaller
+package:org.altruist.BajajExperia
+package:com.whatsapp
+package:in.amazon.mShop.android.shopping
+package:com.flipkart.android
+package:in.org.npci.upiapp
+package:com.magicpin.local
+package:com.dreamplug.androidapp
+package:net.one97.paytm
+package:com.kotak811mobilebankingapp.instantsavingsupiscanandpayrecharge
+package:com.innopay.payment.user
+package:com.google.android.apps.nbu.paisa.user
+package:com.axis.mobile
