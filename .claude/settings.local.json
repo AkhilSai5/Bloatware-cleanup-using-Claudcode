@@ -1,0 +1,7 @@
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "http://localhost:20128/v1",
+    "ANTHROPIC_MODEL": "omni-akhil",
+    "ANTHROPIC_API_KEY": "sk-183492092e1821a4-eadb3a-1f898ad0"
+  }
+}
