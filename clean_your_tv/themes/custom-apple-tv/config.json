@@ -1,13 +1,20 @@
 ﻿{
   "dock_apps": [
     "com.google.android.youtube.tv",
-    "app.netmirror.newtv",
-    "com.graymatrix.did",
-    "com.htlabs.ottplay"
+    "in.startv.hotstar",
+    "com.amazon.amazonvideo.livingroom",
+    "com.sonyliv",
+    "com.android.vending"
   ],
-  "columns": 4,
-  "dock_row": true,
-  "dock_title": true,
-  "fill_dock": false,
-  "background_color": "#000000"
+  "columns": 5,
+  "background_color": "#000000",
+  "wallpaper": false,
+  "cinematic_home": true,
+  "dock_glass": true,
+  "icon_only_buttons": true,
+  "app_glow": true,
+  "glow_style": "horizon",
+  "focus_overshoot": false,
+  "advanced_effects": true,
+  "show_inputs_pill": false
 }

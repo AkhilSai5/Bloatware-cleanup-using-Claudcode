@@ -1,14 +1,19 @@
 {
   "dock_apps": [
-    "com.netflix.ninja",
-    "com.google.android.youtube.tv",
+    "in.startv.hotstar",
     "com.amazon.amazonvideo.livingroom",
-    "com.disney.disneyplus",
-    "com.wbd.stream",
-    "com.apple.atve.androidtv.appletv"
+    "app.netmirror.newtv",
+    "com.google.android.youtube.tv",
+    "com.sonyliv"
   ],
+  "hidden_apps": [
+    "com.tcl.tv",
+    "com.tcl.settings",
+    "com.android.tv.settings"
+  ],
+  "fill_dock": true,
   "background_color": "#090C14",
-  "wallpaper": true,
+  "wallpaper": false,
   "cinematic_home": true,
   "dock_glass": true,
   "icon_only_buttons": true,
